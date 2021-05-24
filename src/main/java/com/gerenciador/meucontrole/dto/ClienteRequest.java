@@ -39,6 +39,7 @@ public class ClienteRequest {
 	@Valid
 	private ClienteEnderecoRequest endereco;
 
+	@Valid
 	private List<ClienteContatoRequest> contatos;
 
 }

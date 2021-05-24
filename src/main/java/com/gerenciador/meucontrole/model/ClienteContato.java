@@ -1,11 +1,14 @@
 package com.gerenciador.meucontrole.model;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.Email;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -20,8 +23,12 @@ public class ClienteContato {
 	@EqualsAndHashCode.Include
 	private Long id;
 
-	private String contato;
+	private String telefone;
+	
+	@Email
+	private String email;
 
+	@Enumerated(EnumType.STRING)
 	private TipoContato tipoContato;
 
 	@ManyToOne
