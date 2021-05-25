@@ -1,10 +1,12 @@
 package com.gerenciador.meucontrole.controller;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -28,8 +30,8 @@ public class ClienteController {
 	private ClienteService clienteService;
 
 	@GetMapping
-	public ResponseEntity<List<ClienteResponse>> getClientes() {
-		return ResponseEntity.ok(clienteService.findAll());
+	public ResponseEntity<Page<ClienteResponse>> getClientes(@PageableDefault(page = 0, size = 10, direction = Direction.DESC, sort = "id") Pageable page) {
+		return ResponseEntity.ok(clienteService.findAllPageable(page));
 	}
 
 	@GetMapping("/{id}")

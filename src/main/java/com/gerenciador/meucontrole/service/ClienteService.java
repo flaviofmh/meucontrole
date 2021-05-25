@@ -1,11 +1,11 @@
 package com.gerenciador.meucontrole.service;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.gerenciador.meucontrole.dto.ClienteRequest;
@@ -27,21 +27,14 @@ public class ClienteService {
 	@Autowired
 	private ModelMapper modelMapper;
 
-	public List<ClienteResponse> findAll() {
+	public Page<ClienteResponse> findAllPageable(Pageable page) {
 
-		List<Cliente> clientes = clienteRepository.findAll();
+		Page<Cliente> clientesPage = clienteRepository.findAll(page);
 
-		if (clientes == null || clientes.size() == 0)
-			throw new EntidadeNaoEncontradaException("Não existe cliente cadastrado");
+		Page<ClienteResponse> clienteResponsePage = clientesPage
+				.map(cliente -> ClienteResponse.fromCliente(modelMapper, cliente));
 
-		List<ClienteResponse> clientesResponse = new ArrayList<ClienteResponse>();
-
-		clientes.forEach(c -> {
-			ClienteResponse map = modelMapper.map(c, ClienteResponse.class);
-			clientesResponse.add(map);
-		});
-
-		return clientesResponse;
+		return clienteResponsePage;
 	}
 
 	public ClienteResponse findById(Long id) {
@@ -69,10 +62,10 @@ public class ClienteService {
 			novoContato.setCliente(clienteSalvo);
 			contatoService.save(novoContato);
 		});
-		
+
 		Optional<Cliente> clienteOptional = clienteRepository.findById(clienteSalvo.getId());
-		
-		return  modelMapper.map(clienteOptional.get(), ClienteResponse.class);
+
+		return modelMapper.map(clienteOptional.get(), ClienteResponse.class);
 	}
 
 	public void delete(Long id) {
@@ -82,7 +75,7 @@ public class ClienteService {
 		if (clienteOptional.isPresent()) {
 
 			Cliente cliente = clienteOptional.get();
-			
+
 			if (cliente.isAtivo())
 				throw new EntidadeNaoPodeSerExcluida("Cliente de Id " + id + " não pode ser excluíd, pois está ativo");
 
