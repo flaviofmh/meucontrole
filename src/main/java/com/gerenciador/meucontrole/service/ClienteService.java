@@ -22,9 +22,6 @@ public class ClienteService {
 	private ClienteRepository clienteRepository;
 
 	@Autowired
-	private ClienteContatoService contatoService;
-
-	@Autowired
 	private ModelMapper modelMapper;
 
 	public Page<ClienteResponse> findAllPageable(Pageable page) {
@@ -56,16 +53,13 @@ public class ClienteService {
 
 		Cliente novoCliente = modelMapper.map(clienteRequest, Cliente.class);
 
-		Cliente clienteSalvo = clienteRepository.save(novoCliente);
-
-		novoCliente.getContatos().forEach(novoContato -> {
-			novoContato.setCliente(clienteSalvo);
-			contatoService.save(novoContato);
+		novoCliente.getContatos().forEach(contato -> {
+			contato.setCliente(novoCliente);
 		});
 
-		Optional<Cliente> clienteOptional = clienteRepository.findById(clienteSalvo.getId());
+		Cliente clienteSalvo = clienteRepository.save(novoCliente);
 
-		return modelMapper.map(clienteOptional.get(), ClienteResponse.class);
+		return modelMapper.map(clienteSalvo, ClienteResponse.class);
 	}
 
 	public void delete(Long id) {
@@ -78,10 +72,6 @@ public class ClienteService {
 
 			if (cliente.isAtivo())
 				throw new EntidadeNaoPodeSerExcluida("Cliente de Id " + id + " não pode ser excluíd, pois está ativo");
-
-			cliente.getContatos().forEach(contato -> {
-				contatoService.delete(contato);
-			});
 
 			clienteRepository.delete(cliente);
 		} else {
