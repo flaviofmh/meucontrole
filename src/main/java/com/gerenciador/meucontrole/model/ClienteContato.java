@@ -12,10 +12,12 @@ import javax.validation.constraints.Email;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@NoArgsConstructor
 public class ClienteContato {
 
 	@Id
@@ -24,7 +26,7 @@ public class ClienteContato {
 	private Long id;
 
 	private String telefone;
-	
+
 	@Email
 	private String email;
 
@@ -34,8 +36,5 @@ public class ClienteContato {
 	@ManyToOne
 	@JoinColumn(name = "cliente_id")
 	private Cliente cliente;
-
-	public ClienteContato() {
-	}
 
 }
