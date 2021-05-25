@@ -59,7 +59,7 @@ public class ClienteService {
 		return clienteResponse;
 	}
 
-	public void save(ClienteRequest clienteRequest) {
+	public ClienteResponse save(ClienteRequest clienteRequest) {
 
 		Cliente novoCliente = modelMapper.map(clienteRequest, Cliente.class);
 
@@ -69,7 +69,10 @@ public class ClienteService {
 			novoContato.setCliente(clienteSalvo);
 			contatoService.save(novoContato);
 		});
-
+		
+		Optional<Cliente> clienteOptional = clienteRepository.findById(clienteSalvo.getId());
+		
+		return  modelMapper.map(clienteOptional.get(), ClienteResponse.class);
 	}
 
 	public void delete(Long id) {

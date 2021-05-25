@@ -38,11 +38,11 @@ public class ClienteController {
 	}
 
 	@PostMapping
-	public ResponseEntity<ClienteResponse> gravaCliente(@RequestBody @Valid ClienteRequest clienteRequest) {
-		clienteService.save(clienteRequest);
-		return ResponseEntity.ok().build();
+	@ResponseStatus(code = HttpStatus.CREATED)
+	public ClienteResponse gravaCliente(@RequestBody @Valid ClienteRequest clienteRequest) {
+		return clienteService.save(clienteRequest);
 	}
-	
+
 	@DeleteMapping("/{id}")
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
 	public void deletaCliente(@PathVariable Long id) {
