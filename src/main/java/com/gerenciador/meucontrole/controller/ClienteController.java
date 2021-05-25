@@ -44,7 +44,7 @@ public class ClienteController {
 	}
 	
 	@DeleteMapping("/{id}")
-	@ResponseStatus(code = HttpStatus.OK)
+	@ResponseStatus(code = HttpStatus.NO_CONTENT)
 	public void deletaCliente(@PathVariable Long id) {
 		clienteService.delete(id);
 	}
