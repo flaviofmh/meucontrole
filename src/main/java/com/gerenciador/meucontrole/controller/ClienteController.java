@@ -18,12 +18,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.gerenciador.meucontrole.controller.statics.UrlResources;
 import com.gerenciador.meucontrole.dto.ClienteRequest;
 import com.gerenciador.meucontrole.dto.ClienteResponse;
 import com.gerenciador.meucontrole.service.ClienteService;
 
 @RestController
-@RequestMapping("cliente")
+@RequestMapping(value = UrlResources.CLIENTE)
 public class ClienteController {
 
 	@Autowired
